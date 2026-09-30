@@ -1,0 +1,170 @@
+/* Fledermauskolonie – schlicht wie Kittens: Text, Knöpfe, ein Petrol-Akzent. */
+/* Ältere Browser ohne light-dark(): immer hell. */
+:root {
+  color-scheme: light;
+  --bg: #faf8f4; --text: #2c2a26; --line: #e4dfd5; --muted: #756f66;
+  --accent: #2f6f73; --miss: #b4534b; --card: #ffffff;
+}
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#faf8f4, #17191d);
+    --text: light-dark(#2c2a26, #e7e4de);
+    --line: light-dark(#e4dfd5, #2d3036);
+    --muted: light-dark(#756f66, #8d8a84);
+    --accent: light-dark(#2f6f73, #7cc4c0);
+    --miss: light-dark(#b4534b, #e0897f);
+    --card: light-dark(#ffffff, #1f2227);
+  }
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+button, select, textarea { font: inherit; color: inherit; }
+button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+b { font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.miss { color: var(--miss); }
+
+/* Aufbau: Handy eine Spalte, PC drei Spalten wie Kittens */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "top" "res" "main" "log";
+}
+.top { grid-area: top; }
+.res { grid-area: res; }
+.main { grid-area: main; min-width: 0; }
+.log { grid-area: log; }
+@media (min-width: 900px) {
+  .app {
+    grid-template-columns: 240px minmax(0, 1fr) 280px;
+    grid-template-areas: "top top top" "res main log";
+    align-items: start;
+  }
+}
+
+.title-row { display: flex; justify-content: space-between; align-items: center; }
+h1 { font-size: 18px; font-weight: 600; margin: 0; }
+.clock { color: var(--muted); }
+.clock > span { display: block; min-height: 1.45em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.link { min-height: 44px; padding: 0 0 0 12px; background: none; border: 0; color: var(--accent); cursor: pointer; }
+.log .link { padding-left: 0; }
+
+/* Ressourcen */
+.res-head { min-height: 44px; padding: 0; background: none; border: 0; color: var(--muted); font-size: 13px; cursor: pointer; }
+.res-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 2px 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+.res-list[hidden] { display: none; }
+.res-row { display: contents; }
+.res-row > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.res-row .rv { text-align: right; }
+.res-row .rr { min-width: 5.5em; text-align: right; color: var(--muted); }
+.res-row .rr.miss { color: var(--miss); }
+.res-row.full .rv { color: var(--accent); }
+
+/* Reiter */
+.tabs { display: flex; gap: 18px; overflow-x: auto; border-bottom: 1px solid var(--line); scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button {
+  min-height: 44px; padding: 0;
+  background: none; border: 0; border-bottom: 2px solid transparent;
+  white-space: nowrap; color: var(--muted); cursor: pointer;
+}
+.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); } /* nicht fett: Breite bleibt gleich */
+.tabs .dot { display: inline-block; width: .8em; text-align: center; color: var(--accent); }
+
+/* Karten: am Handy volle Breite (Klick-Knöpfe nebeneinander), ab 600 px zwei Spalten */
+.panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding-top: 10px; }
+.card {
+  grid-column: 1 / -1;
+  display: flex;
+  min-height: 52px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.card.click { grid-column: auto; }
+@media (min-width: 600px) { .card { grid-column: auto; } }
+.card .buy {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 7px 10px;
+  background: none; border: 0; text-align: left; cursor: pointer; user-select: none;
+}
+.card .buy:disabled { cursor: default; color: var(--muted); }
+.card .name, .card .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .sub { font-size: 13px; color: var(--muted); }
+.card button:focus-visible, .tabs button:focus-visible { outline-offset: -3px; }
+.card .info {
+  flex: none; width: 44px;
+  background: none; border: 0; border-left: 1px solid var(--line);
+  color: var(--muted); font: italic 16px Georgia, serif; cursor: pointer;
+}
+
+/* Fledermäuse-Reiter */
+.summary, .job { grid-column: 1 / -1; }
+.summary { display: grid; gap: 2px; padding-bottom: 6px; }
+.summary .hint { min-height: 1.45em; } /* Platz bleibt reserviert, damit die Jobs nicht springen */
+.job { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.job-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.job-text .name, .job-text .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.job-text .sub { font-size: 13px; color: var(--muted); }
+.step {
+  flex: none; width: 44px; height: 44px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  font-size: 20px; cursor: pointer;
+}
+.step:disabled { color: var(--muted); cursor: default; }
+.card .buy:active:not(:disabled), .step:active:not(:disabled), .btn:active { background: var(--line); }
+
+/* Log */
+.log-list { min-height: calc(4 * 1.45em); color: var(--muted); font-size: 13px; }
+.log-list p { margin-bottom: 2px; }
+
+/* Fenster */
+dialog {
+  width: min(92vw, 420px);
+  padding: 0;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 14px;
+}
+dialog::backdrop { background: rgb(0 0 0 / .35); }
+.sheet-body { display: grid; gap: 10px; padding: 16px; }
+dialog h2 { font-size: 17px; margin: 0; }
+dialog h3 { font-size: 15px; margin: 6px 0 0; }
+dialog ul { margin: 0; padding-left: 1.2em; }
+.btn { min-height: 44px; padding: 0 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+.btn.danger { color: var(--miss); }
+.sheet-body form .btn { width: 100%; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.row-btns { display: flex; gap: 8px; }
+.row-btns .btn { flex: 1; }
+/* Eingabefelder mit 16 px: sonst zoomt iOS beim Antippen hinein */
+select { min-height: 44px; padding: 0 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; font-size: 16px; }
+textarea {
+  width: 100%; padding: 8px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  font: 16px/1.4 ui-monospace, Consolas, monospace;
+}

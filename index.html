@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#17191d" media="(prefers-color-scheme: dark)">
+  <title>Fledermauskolonie</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="robots" content="noindex">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Fledermäuse">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="title-row">
+        <h1>Fledermauskolonie</h1>
+        <button id="menu-btn" class="link" type="button">Menü</button>
+      </div>
+      <div class="clock"><span id="clock-1"></span><span id="clock-2"></span></div>
+    </header>
+
+    <section class="res" aria-label="Ressourcen">
+      <button id="res-toggle" class="res-head" type="button" aria-expanded="true" aria-controls="res-list">Ressourcen</button>
+      <div id="res-list" class="res-list"></div>
+    </section>
+
+    <main class="main">
+      <nav id="tabs" class="tabs" role="tablist" aria-label="Bereiche"></nav>
+      <div id="panel" class="panel" role="tabpanel"></div>
+    </main>
+
+    <aside class="log" aria-label="Log">
+      <div id="log-list" class="log-list" aria-live="polite"></div>
+      <button id="log-more" class="link" type="button">Mehr</button>
+    </aside>
+  </div>
+
+  <dialog id="info" aria-labelledby="info-title">
+    <div class="sheet-body">
+      <h2 id="info-title"></h2>
+      <p id="info-desc"></p>
+      <p id="info-effects" class="muted"></p>
+      <div id="info-cost"></div>
+      <form method="dialog"><button class="btn">Schließen</button></form>
+    </div>
+  </dialog>
+
+  <dialog id="away" aria-labelledby="away-title">
+    <div class="sheet-body">
+      <h2 id="away-title">Während du weg warst</h2>
+      <p id="away-time" class="muted"></p>
+      <ul id="away-list"></ul>
+      <form method="dialog"><button class="btn">Weiter</button></form>
+    </div>
+  </dialog>
+
+  <dialog id="menu" aria-labelledby="menu-title">
+    <div class="sheet-body">
+      <h2 id="menu-title">Menü</h2>
+      <label class="row">Darstellung
+        <select id="theme">
+          <option value="auto">Wie das Gerät</option>
+          <option value="light">Hell</option>
+          <option value="dark">Dunkel</option>
+        </select>
+      </label>
+      <h3>Spielstand</h3>
+      <textarea id="save-text" rows="4" spellcheck="false" aria-label="Spielstand als Text"
+        placeholder="Spielstand hier einfügen"></textarea>
+      <p id="save-msg" class="muted" aria-live="polite"></p>
+      <div class="row-btns">
+        <button id="export" class="btn" type="button">Exportieren</button>
+        <button id="import" class="btn" type="button">Importieren</button>
+      </div>
+      <button id="reset" class="btn danger" type="button">Neu beginnen</button>
+      <form method="dialog"><button class="btn">Schließen</button></form>
+    </div>
+  </dialog>
+
+  <script src="js/data.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
