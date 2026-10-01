@@ -22,6 +22,7 @@
         <button id="menu-btn" class="link" type="button">Menü</button>
       </div>
       <div class="clock"><span id="clock-1"></span><span id="clock-2"></span></div>
+      <div id="star-slot" class="star-slot" hidden><button id="star" class="star" type="button" hidden></button></div>
     </header>
 
     <section class="res" aria-label="Ressourcen">
@@ -57,6 +58,20 @@
       <ul id="away-list"></ul>
       <form method="dialog"><button class="btn">Weiter</button></form>
     </div>
+  </dialog>
+
+  <dialog id="ascend" aria-labelledby="ascend-title">
+    <form id="ascend-form" class="sheet-body" method="dialog">
+      <h2 id="ascend-title">Weiterziehen</h2>
+      <p id="ascend-stars" class="muted"></p>
+      <label class="field">Name des Sternbilds
+        <input id="ascend-name" maxlength="24" autocomplete="off" spellcheck="false" required>
+      </label>
+      <div class="row-btns">
+        <button class="btn" value="cancel" formnovalidate>Abbrechen</button>
+        <button class="btn" value="go">Weiterziehen</button>
+      </div>
+    </form>
   </dialog>
 
   <dialog id="menu" aria-labelledby="menu-title">

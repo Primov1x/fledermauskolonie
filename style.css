@@ -52,7 +52,7 @@ p { margin: 0; }
 .log { grid-area: log; }
 @media (min-width: 900px) {
   .app {
-    grid-template-columns: 240px minmax(0, 1fr) 280px;
+    grid-template-columns: 280px minmax(0, 1fr) 260px; /* Platz für „Kristalle 12,3 / 20 +0,003/s“ */
     grid-template-areas: "top top top" "res main log";
     align-items: start;
   }
@@ -64,6 +64,15 @@ h1 { font-size: 18px; font-weight: 600; margin: 0; }
 .clock > span { display: block; min-height: 1.45em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .link { min-height: 44px; padding: 0 0 0 12px; background: none; border: 0; color: var(--accent); cursor: pointer; }
 .log .link { padding-left: 0; }
+
+/* Sternschnuppe: fester Platz im Kopf, damit nichts springt */
+.star-slot { min-height: 44px; display: flex; align-items: center; }
+.star {
+  min-height: 36px; padding: 0 14px;
+  background: var(--card); color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 18px;
+  white-space: nowrap; cursor: pointer;
+}
 
 /* Ressourcen */
 .res-head { min-height: 44px; padding: 0; background: none; border: 0; color: var(--muted); font-size: 13px; cursor: pointer; }
@@ -93,6 +102,7 @@ h1 { font-size: 18px; font-weight: 600; margin: 0; }
 }
 .tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); } /* nicht fett: Breite bleibt gleich */
 .tabs .dot { display: inline-block; width: .8em; text-align: center; color: var(--accent); }
+@media (min-width: 900px) { .tabs { flex-wrap: wrap; } } /* am PC alle Reiter sichtbar, bei Bedarf zweizeilig */
 
 /* Karten: am Handy volle Breite (Klick-Knöpfe nebeneinander), ab 600 px zwei Spalten */
 .panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding-top: 10px; }
@@ -107,6 +117,7 @@ h1 { font-size: 18px; font-weight: 600; margin: 0; }
 }
 .card.click { grid-column: auto; }
 @media (min-width: 600px) { .card { grid-column: auto; } }
+.card.wide { grid-column: 1 / -1; }
 .card .buy {
   flex: 1; min-width: 0;
   display: flex; flex-direction: column; justify-content: center;
@@ -122,11 +133,36 @@ h1 { font-size: 18px; font-weight: 600; margin: 0; }
   background: none; border: 0; border-left: 1px solid var(--line);
   color: var(--muted); font: italic 16px Georgia, serif; cursor: pointer;
 }
+.card .info:disabled { cursor: default; opacity: .4; }
+/* Dauerauftrag der Nachbarn: schmaler Schalter neben dem Info-Knopf */
+.card .auto {
+  flex: none; width: 56px;
+  background: none; border: 0; border-left: 1px solid var(--line);
+  color: var(--muted); font-size: 13px; cursor: pointer;
+}
+.card .auto:disabled { cursor: default; opacity: .4; }
+.card .auto[aria-pressed="true"] { color: var(--accent); }
+.card.on { border-color: var(--accent); }
+/* Fortschritt der Erkundung: dünner Balken unten in der Karte */
+.card { position: relative; }
+.card .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; pointer-events: none; }
+.card .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
 
 /* Fledermäuse-Reiter */
 .summary, .job { grid-column: 1 / -1; }
 .summary { display: grid; gap: 2px; padding-bottom: 6px; }
 .summary .hint { min-height: 1.45em; } /* Platz bleibt reserviert, damit die Jobs nicht springen */
+.summary.young { padding: 10px 0 0; }
+.summary.list { gap: 4px; padding-top: 4px; }
+.summary.list .chron-head { margin-top: 8px; }
+.summary.list .chron-head:first-child { margin-top: 0; }
+.field { display: grid; gap: 6px; }
+input {
+  min-height: 44px; padding: 0 10px;
+  background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 10px;
+  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; /* 16 px: sonst zoomt iOS */
+}
+input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .job { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); }
 .job-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .job-text .name, .job-text .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -138,6 +174,16 @@ h1 { font-size: 18px; font-weight: 600; margin: 0; }
 }
 .step:disabled { color: var(--muted); cursor: default; }
 .card .buy:active:not(:disabled), .step:active:not(:disabled), .btn:active { background: var(--line); }
+
+/* Werkstatt und Auswahl-Zeilen */
+.c-btn { width: auto; min-width: 44px; padding: 0 6px; font-size: 15px; }
+.row-select {
+  grid-column: 1 / -1;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 6px 0; border-bottom: 1px solid var(--line);
+}
+.row-select span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-select select { flex: none; max-width: 55%; }
 
 /* Log */
 .log-list { min-height: calc(4 * 1.45em); color: var(--muted); font-size: 13px; }
